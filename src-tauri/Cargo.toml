@@ -1,0 +1,91 @@
+[package]
+name = "app"
+version = "0.1.0"
+description = "A Tauri App"
+authors = ["you"]
+license = ""
+repository = ""
+edition = "2021"
+rust-version = "1.77.2"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.0.0-rc", features = [] }
+
+
+[dependencies]
+#SERDE
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+log = "0.4"
+#LOG
+#TAURI
+tauri = { version = "2.0.0-rc", features = [] }
+tauri-plugin-log = "2.0.0-rc"
+tauri-plugin-dialog = "2.0.0-rc"
+tauri-plugin-os = "2.0.0-rc"
+tauri-plugin-store = "2.0.0-rc"
+tauri-plugin-http = "2.0.0-rc"
+tauri-plugin-websocket = "2.0.0-rc"
+tauri-plugin-stronghold = "2.0.0-rc"
+tauri-plugin-window-state = "2.0.0-rc"
+tauri-plugin-opener = "2.0.0-rc"
+tauri-plugin-system-info = { git = "https://github.com/HuakunShen/tauri-plugin-system-info", branch = "v2" }
+#tauri-plugin-context-menu = { git = "https://github.com/c2r0b/tauri-plugin-context-menu", branch = "main" }
+tauri-plugin-notification = "2.0.0-rc"
+#ANYHOW
+anyhow = "1.0"
+#FUBUKI
+tokio = { version = "1", features = ["full"] }
+env_logger = "0.11"
+#NETWORK
+network = { path = "../modules/network" }
+#CHRONO
+chrono = { version = "0.4", features = ["serde"] }
+#DOTENVY
+dotenvy = "0.15"
+#MOODLE
+
+moodle_client = { path = "../modules/moodle-client" }
+moodle_api = { path = "../modules/moodle-api" }
+#REQWEST
+reqwest = { version = "0.12.24", features = ["json"] }
+base64 = "0.22.1"
+#URLENCODING
+urlencoding = "2.1"
+scraper = "0.24.0"
+encoding_rs = "0.8"
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"
+#SCRAPER
+
+
+#LIBp2p
+libp2p = { version = "0.40", features = ["tcp-tokio", "mdns"] }
+ntapi = "0.4.1"
+async-trait = "0.1"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+tokio-tungstenite = "0.20"
+tracing = "0.1"
+
+
+[features]
+default = [ "custom-protocol" ]
+custom-protocol = [ "tauri/custom-protocol" ]
+
+[profile.dev]
+lto = "off"
+codegen-units = 16
+opt-level = 0
+panic = "abort"
+
+[profile.release]
+opt-level = 3
+lto = "off"
+codegen-units = 16

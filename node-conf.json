@@ -1,0 +1,88 @@
+{
+  "mtu": 1444,
+  "channel_limit": 100,
+  "api_addr": "127.0.0.1:3030",
+  "tcp_heartbeat_interval_secs": 5,
+  "udp_heartbeat_interval_secs": 5,
+  "tcp_heartbeat_continuous_loss": 5,
+  "udp_heartbeat_continuous_loss": 5,
+  "udp_heartbeat_continuous_recv": 3,
+  "reconnect_interval_secs": 3,
+  "udp_socket_recv_buffer_size": 8192,
+  "udp_socket_send_buffer_size": 8192,
+  "external_routing_table": false,
+  "allow_packet_forward": true,
+  "allow_packet_not_in_rules_send_to_kernel": false,
+  "enable_hook": false,
+  "groups": [
+    {
+      "node_name": "cs-first-year",
+      "server_addr": "192.168.100.100:54321",
+      "key": "Tanroads.123",
+      "mode": {
+        "p2p": ["UDP"],
+        "relay": ["UDP", "TCP"]
+      }
+    },
+    {
+      "node_name": "cs-second-year",
+      "server_addr": "192.168.100.100:54322",
+      "key": "Tanroads.123",
+      "mode": {
+        "p2p": ["UDP"],
+        "relay": ["UDP", "TCP"]
+      }
+    },
+    {
+      "node_name": "cs-third-year",
+      "server_addr": "192.168.100.100:54323",
+      "key": "Tanroads.123",
+      "mode": {
+        "p2p": ["UDP"],
+        "relay": ["UDP", "TCP"]
+      }
+    },
+    {
+      "node_name": "cse-first-year",
+      "server_addr": "192.168.100.100:54324",
+      "key": "Tanroads.123",
+      "mode": {
+        "p2p": ["UDP"],
+        "relay": ["UDP", "TCP"]
+      }
+    },
+    {
+      "node_name": "cse-second-year",
+      "server_addr": "192.168.100.100:54325",
+      "key": "Tanroads.123",
+      "mode": {
+        "p2p": ["UDP"],
+        "relay": ["UDP"]
+      }
+    },
+    {
+      "node_name": "cse-third-year",
+      "server_addr": "192.168.100.100:54326",
+      "key": "Tanroads.123",
+      "mode": {
+        "p2p": ["UDP"],
+        "relay": ["UDP"]
+      }
+    },
+    {
+      "node_name": "Admin",
+      "server_addr": "192.168.100.100:54327",
+      "key": "Tanroads.123",
+      "mode": {
+        "p2p": ["UDP"],
+        "relay": ["UDP"]
+      }
+    }
+  ],
+  "features": {
+    "disable_api_server": false,
+    "disable_hosts_operation": true,
+    "disable_signal_handling": false,
+    "disable_route_operation": false
+  }
+}

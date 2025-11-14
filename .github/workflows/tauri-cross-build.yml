@@ -1,0 +1,50 @@
+name: Tauri Multi-Platform Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  tauri:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        target:
+          - x86_64-unknown-linux-gnu     # Linux
+          - x86_64-pc-windows-gnu        # Windows (MSI/exe)
+          - x86_64-apple-darwin          # macOS (unsigned .app)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install Rust and needed targets
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install Tauri CLI
+        run: pnpm add --global @tauri-apps/cli
+
+      - name: Install application dependencies
+        run: pnpm install
+
+      - name: Build Tauri app for ${{ matrix.target }}
+        run: pnpm tauri build --target ${{ matrix.target }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: tauri-build-${{ matrix.target }}
+          path: src-tauri/target/${{ matrix.target }}/release/bundle/
