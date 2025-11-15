@@ -1,5 +1,5 @@
 use crate::moodle::courses::get_course_files_assignments_questions::get_course_files_assignments_quizzes as inner_get_course_files_assignments_quizzes;
-use crate::moodle::courses::get_course_content_items::get_course_content_items as inner_get_course_content_items;
+use crate::moodle::courses::get_course_content::get_course_content as inner_get_course_content_items;
 use crate::moodle::courses::get_enrolled_users::get_enrolled_users_for_course as inner_get_enrolled_users_for_course;
 use crate::moodle::courses::get_user_courses::get_user_courses as inner_get_user_courses;
 use crate::moodle::courses::get_all_courses::get_all_courses as inner_get_all_courses;
@@ -15,7 +15,7 @@ pub async fn get_course_files_assignments_quizzes(course_id: u32) -> Result<serd
 /// Get detailed content items for a given course
 #[tauri::command]
 pub async fn get_course_content_items(course_id: i64) -> Result<serde_json::Value, String> {
-    inner_get_course_content_items(course_id)
+    inner_get_course_content_items(course_id as u32)
         .await
         .map_err(|e| e.to_string())
 }

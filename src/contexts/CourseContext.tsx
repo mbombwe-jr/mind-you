@@ -142,7 +142,6 @@ export const CourseProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await invoke<any>('get_user_courses');
       const coursesData = response?.courses || (Array.isArray(response) ? response : []);
-      
       if (Array.isArray(coursesData)) {
         setUserCourses(coursesData);
       }
@@ -160,7 +159,6 @@ export const CourseProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await invoke<any>('get_all_courses');
       const coursesData = Array.isArray(response) ? response : [];
-      
       if (Array.isArray(coursesData)) {
         setAllCourses(coursesData);
       }
@@ -172,7 +170,7 @@ export const CourseProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Fetch course content (files, assignments, quizzes, sections)
+  // Fetch course content (files, assignments, quizzes)
   const fetchCourseContent = useCallback(async (courseId: number): Promise<CourseContent | null> => {
     try {
       // Fetch processed content (files, assignments, quizzes)

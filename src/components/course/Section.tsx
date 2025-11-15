@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react"; 
 import Section2 from "./Section2.tsx";
 
@@ -112,8 +112,36 @@ interface SectionProps {
   modules?:  Module[];
 }
 
-function Section({ title = "Module Title", summary = "Module description...", id , modules=[]}: SectionProps) {
-  const [isOpen, setIsOpen] = useState(true);
+function Section({ title = "Module Title", summary = "Module description...", id , modules: initialModules = [] }: SectionProps) {
+  const [isOpen, setIsOpen] = useState(false); // collapsed by default
+  const [modules, setModules] = useState<Module[]>(initialModules);
+  const [loading, setLoading] = useState(false);
+
+  // Replace this with your actual API call
+  async function fetchModulesForSection(sectionId: number): Promise<Module[]> {
+    setLoading(true);
+    // Simulate API delay
+    await new Promise(r => setTimeout(r, 1200));
+    // TODO: Replace below with real fetch. Here is a demo stub only.
+    const demo = [
+      {
+        id: 1,
+        url: "#",
+        name: "Sample Module",
+        modname: "resource",
+        description: "Loaded dynamically when you open the section."
+      }
+    ];
+    setLoading(false);
+    return demo;
+  }
+
+  useEffect(() => {
+    if (isOpen && modules.length === 0 && id) {
+      fetchModulesForSection(id).then(setModules);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, id]);
 
   return (
     <div className="w-full max-w-[700px] flex flex-col overflow-hidden mb-4">
@@ -125,18 +153,16 @@ function Section({ title = "Module Title", summary = "Module description...", id
         viewBox="0 0 1764 343"
         style={{ minHeight: 'auto' }}
       >
-  <defs>
-    <clipPath id="clip-path">
+        <defs>
+          <clipPath id="clip-path">
             <rect id="HEADER" width="1764" height="343" rx="80" transform="translate(1994 437)" fill="#1a1a1a" stroke="#707070" strokeWidth={1} />
-    </clipPath>
-  </defs>
-  <g id="SECTION" transform="translate(-1994 -437)">
-
-
+          </clipPath>
+        </defs>
+        <g id="SECTION" transform="translate(-1994 -437)">
           {/* HEADER bar */}
           <g id="HEADER-2" transform="translate(1994 437)" fill="#1a1a1a" stroke="#707070" strokeWidth={1}>
             {/* Top-only border radius */}
-            <path 
+            <path
               d={`
                 M 0,80
                 Q 0,0 80,0
@@ -146,7 +172,7 @@ function Section({ title = "Module Title", summary = "Module description...", id
                 L 0,343
                 Z
               `}
-              />
+            />
             <path
               d={`
                 M 0.5,80.5
@@ -171,7 +197,7 @@ function Section({ title = "Module Title", summary = "Module description...", id
             <tspan x={0} y={0}>{title}</tspan>
           </text>
 
-          {/* Icon circle on header (embed control inside the circle) */}
+          {/* Icon circle and open/close button */}
           <g id="ICON" transform="translate(3450 494)" fill="#fff" stroke="#1a1a1a" strokeWidth={5}>
             <circle cx={114.5} cy={114.5} r={114.5} />
             <circle cx={114.5} cy={114.5} r={112} fill="none" />
@@ -195,28 +221,24 @@ function Section({ title = "Module Title", summary = "Module description...", id
                   title={isOpen ? "Hide description" : "Show description"}
                   aria-label={isOpen ? "Hide description" : "Show description"}
                 >
-                  <ChevronDown
-                    size={200}
-                    style={{
-                      transition: "transform 200ms ease",
-                      transform: isOpen ? "rotate(0deg)" : "rotate(-180deg)",
-                    }}
-                  />
+                  {/* You can put an icon here if desired */}
+                  {isOpen ? "▲" : "▼"}
                 </button>
               </div>
             </foreignObject>
-    </g>
-  </g>
+          </g>
+        </g>
       </svg>
       {/* Content Panel */}
       {isOpen && (
         <div className="w-full">
-           <Section2
-            id={id}
-            name={title}
-            summary={summary}
-            modules={modules}
-          />
+          {loading ? (
+            <div>Loading course content...</div>
+          ) : modules.length > 0 ? (
+            <Section2 id={id} name={title} summary={summary} modules={modules} />
+          ) : (
+            <div>No course content found.</div>
+          )}
         </div>
       )}
     </div>
