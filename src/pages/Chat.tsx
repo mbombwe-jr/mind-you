@@ -15,7 +15,7 @@ import DraftsPage from '@/components/chat/pages/drafts';
 
 function ChatContent() {
   const { currentChannel, currentView } = useChatContext();
-  const isMobile = useIsMobile();
+  const isMobile =  useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   
   // Show ChannelArea for channels, ChatArea for direct messages
