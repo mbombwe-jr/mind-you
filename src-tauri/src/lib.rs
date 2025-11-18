@@ -1,5 +1,6 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use anyhow::Result;
+use tauri_plugin_updater::UpdaterExt;
 
 // Import the existing Moodle modules
 mod commands;
@@ -53,7 +54,8 @@ pub fn run() {
 
     println!("app_lib::run -> before Builder::default");
     tauri::Builder::default()
-        // .plugin(tauri_plugin_updater::Builder::new().build())
+        // Ensure the updater plugin is registered before calling `app.updater()`
+        .plugin(tauri_plugin_updater::Builder::new().build())
         // .plugin(tauri_plugin_opener::init())
         // .plugin(tauri_plugin_store::Builder::new().build())
         // .plugin(tauri_plugin_dialog::init())
@@ -67,11 +69,23 @@ pub fn run() {
         // .plugin(tauri_plugin_notification::init())
 
         .setup(|_app| {
+            let handle = _app.handle().clone();
             println!("tauri setup callback");
-            
+
             // Kick off an initial Moodle login on startup (non-blocking)
             // Add delay to prevent blocking during startup
              tauri::async_runtime::spawn(async move {
+                // Frontend (React) now handles update checks with a progress UI.
+                // To avoid duplicate downloads, we no longer trigger updater here.
+                // If you want to keep a backend-only fallback, guard with cfg!(not(debug_assertions))
+                // and ensure it doesn't conflict with the frontend.
+                // Example fallback (disabled):
+                // if !cfg!(debug_assertions) {
+                //     if let Err(e) = update(handle.clone()).await {
+                //         eprintln!("Updater check failed: {}", e);
+                //     }
+                // }
+
                  // Wait a bit before attempting login to avoid startup issues
                  tokio::time::sleep(tokio::time::Duration::from_millis(4000)).await;
                  if let Err(e) = login().await {
@@ -81,7 +95,7 @@ pub fn run() {
                  if let Err(e) = get_assignment_count().await {
                     eprintln!("Initial get_assignment_count failed: {}", e);
                 }
-                
+
                 if let Err(e) = get_enrolled_course_count().await {
                     eprintln!("Initial get_enrolled_course_count failed: {}", e);
                 }
@@ -131,4 +145,28 @@ pub fn run() {
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
     println!("app_lib::run -> end");
+}
+
+async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
+  if let Some(update) = app.updater()?.check().await? {
+    let mut downloaded = 0;
+
+    // alternatively we could also call update.download() and update.install() separately
+    update
+      .download_and_install(
+        |chunk_length, content_length| {
+          downloaded += chunk_length;
+          println!("downloaded {downloaded} from {content_length:?}");
+        },
+        || {
+          println!("download finished");
+        },
+      )
+      .await?;
+
+    println!("update installed");
+    app.restart();
+  }
+
+  Ok(())
 }

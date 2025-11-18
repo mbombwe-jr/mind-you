@@ -1,0 +1,11 @@
+{
+  "version": "0.1.0",
+  "notes": "Initial release",
+  "pub_date": "2025-11-18T00:00:00Z",
+  "platforms": {
+    "linux-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRVVJRNVBXRnNmQTBXRzdSais1N1dqZVQ3SkFOeUZOUGF0VEUzSFFWTGcwamdrcDN5Vzd3MjR0d3VWaVVOaFMreHEwSDhyRjAzWkhlSisyYmNWTzNVWGt0dkRiSVJ3endvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzYzNTA3NzYwCWZpbGU6dGFibGV0b3BfMC4xLjBfYW1kNjQuQXBwSW1hZ2UKTkhvakh4M284cWp3L0VZcWt3QVhxUEdnRjFMWmY1VW1nNEdMTTE2aXZTUmpFV0s5ekVJa2FuUnhDa2RVVGExajlFbktIUFFxSWNXc2ZtWDg3dk9pQkE9PQo=",
+      "url": "https://github.com/mbombwe-jr/mind-you/releases/download/app-v0.1.0/tabletop_0.1.0_amd64.AppImage"
+    }
+  }
+}

@@ -11,8 +11,8 @@ import { useState, useEffect, useCallback } from "react";
 import NewsCard from '@/components/home/NewsCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { invoke } from "@tauri-apps/api/core";
-import NoContent from '@/components/home/NoContent';
 import { useSite } from "@/contexts/SiteContext";
+import UpdaterOverlay from "@/components/updater/updater";
 
 export interface NewsArticle {
   title: string;
@@ -103,6 +103,8 @@ function Dashboard() {
 
   return (
     <div className="relative w-full flex flex-col items-center px-4 pt-6 min-h-0">
+      {/* Updater small window with progress bar */}
+      <UpdaterOverlay />
       {/* ==== Background Grid Overlay ==== */}
       <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#1a1a1a,transparent_1px),linear-gradient(to_bottom,#1a1a1a33_1px,transparent_1px)] bg-[size:20px_20px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
