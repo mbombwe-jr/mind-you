@@ -111,7 +111,7 @@ function Dashboard() {
       <div className="relative z-10 w-full flex flex-col items-center">
           {/* ===================== HEADER ===================== */}
           <h1 className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-center luckiest-guy-regular text-[#1a1a1a]">
-            Dashboard
+            Dashboard v_2
           </h1>
 
           {/* ========== MAIN GRID (Moodle Details & Calendar) ========== */}
