@@ -69,10 +69,11 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
-          tagName: app-v__VERSION__           # auto-created tag
-          releaseName: 'App v__VERSION__'     # auto-created release
+          tagName: app-v__VERSION__
+          releaseName: 'App v__VERSION__'
           releaseBody: 'See assets to download this version.'
           releaseDraft: false
           prerelease: false
-          updaterJson: true                   # generates latest.json
+          updaterJson: true           # generate latest.json
+          includeUpdaterSignature: false   # 🚫 DO NOT upload .sig files
           args: ${{ matrix.args }}

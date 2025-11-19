@@ -1,6 +1,7 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use anyhow::Result;
 use tauri_plugin_updater::UpdaterExt;
+use tauri::Manager; // for get_webview_window and window setters
 
 // Import the existing Moodle modules
 mod commands;
@@ -74,6 +75,20 @@ pub fn run() {
         .setup(|_app| {
             let handle = _app.handle().clone();
             println!("tauri setup callback");
+
+            // Defensive: ensure the main window is not in click-through mode
+            if let Some(win) = _app.get_webview_window("main") {
+                // Best effort: ignore any error, just ensure it's set to false
+                let _ = win.set_ignore_cursor_events(false);
+                // Also ensure it's not always-on-top related focus issue
+                let _ = win.set_always_on_top(false);
+
+                // On Linux Wayland, borderless windows can have input region anomalies.
+                // If running on Wayland, force decorations on to ensure proper hit testing.
+                if std::env::var("XDG_SESSION_TYPE").map(|v| v.to_lowercase()).unwrap_or_default() == "wayland" {
+                    let _ = win.set_decorations(true);
+                }
+            }
 
             // Kick off an initial Moodle login on startup (non-blocking)
             // Add delay to prevent blocking during startup
