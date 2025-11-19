@@ -17,7 +17,7 @@
         "center": true,
         "minWidth": 1200,
         "minHeight": 850,
-        "transparent": true,
+        "transparent": false,
         "resizable": false,
         "fullscreen": false,
         "decorations": false,
