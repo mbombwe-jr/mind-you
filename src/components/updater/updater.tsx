@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { check } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
+import { invoke } from '@tauri-apps/api/core';
 
 // Ensure we only run one updater flow even if the component is mounted multiple times
 let updaterFlowStarted = false;
@@ -128,6 +129,14 @@ export default function UpdaterOverlay() {
       await relaunch();
     } catch (e) {
       console.error('Relaunch failed:', e);
+      // Fallback to a backend command that calls app.restart()
+      try {
+        await invoke('restart_app');
+      } catch (err) {
+        console.error('Fallback restart failed:', err);
+        setStatus('Restart failed. Please close and reopen the app manually.');
+        setPhase('error');
+      }
     }
   }
 

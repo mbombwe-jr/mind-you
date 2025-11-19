@@ -56,6 +56,9 @@ pub fn run() {
     tauri::Builder::default()
         // Ensure the updater plugin is registered before calling `app.updater()`
         .plugin(tauri_plugin_updater::Builder::new().build())
+        // Provide process controls to allow frontend to relaunch the app after an update
+        // (used as a primary or fallback relaunch mechanism from the UI)
+        .plugin(tauri_plugin_process::init())
         // .plugin(tauri_plugin_opener::init())
         // .plugin(tauri_plugin_store::Builder::new().build())
         // .plugin(tauri_plugin_dialog::init())
@@ -104,6 +107,8 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            // SYSTEM
+            restart_app,
             //MOODLE
             get_site_info,
             //MOODLE DASHBOARD
@@ -169,4 +174,12 @@ async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
   }
 
   Ok(())
+}
+
+/// Restart the application on demand from the frontend.
+/// Used as a reliable fallback if the JS plugin relaunch fails on some platforms.
+#[tauri::command]
+async fn restart_app(app: tauri::AppHandle) -> Result<(), String> {
+    app.restart();
+    Ok(())
 }
